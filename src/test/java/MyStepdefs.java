@@ -19,6 +19,35 @@ public class MyStepdefs {
     private String myEmail, myUsename, myPassword, myCheckbox, mylonganvandName;
     private WebDriver driver;
 
+    @Given("I have logged in to Mailchimp")
+    public void iHaveLoggedInToMailchimp() {
+        System.setProperty("webdriver.chrome.driver", "C:\\Selanium\\chromedriver.exe");
+        driver = new ChromeDriver();
+        driver.get("https://login.mailchimp.com/signup/");
+
+    }
+
+    @Given("I have written my password {string} Given I have written my checkbox {string}")
+    public void iHaveWrittenMyPasswordGivenIHaveWrittenMyCheckbox(String password, String checkbox) {
+        myPassword = password;
+        scroll(driver);
+        sendKeys(driver, By.id("new_password"), password);
+        myCheckbox = checkbox;
+        //testClassName
+        scroll(driver);
+        sendKeys(driver, By.name("marketing_newsletter"), checkbox);
+        driver.quit();
+
+    }
+
+
+    @Then("the following successfully message is displayed {string}")
+    public void theFollowingSuccessfullyMessageIsDisplayed(String expected) {
+        String actual = getText(driver, By.tagName("h1"));
+
+        assertEquals(expected, actual);
+    }
+
     @Given("I have written my email {string}")
     public void iHaveWrittenMyEmail(String email) {
         myEmail = email;
@@ -35,27 +64,9 @@ public class MyStepdefs {
             for (int i = 0; i < 100; i++) {
                 sendKeys(driver, By.id("new_username"), username);
             }
-        } else if (username.equals("daarood11@gmail.com")) {
-            System.out.println("Användare är redan upptagen");
-        } else if (username.equals("aa@.com")) {
-            System.out.println("Användare saknas");
-        } else {
+        }  else {
             sendKeys(driver, By.id("new_username"), username);
         }
-        /*
-        int size = username.length();
-
-        if (size >= 100) {
-            for (int i = 0; i < size; i++) {
-                System.out.println("longanvandName");
-            }
-
-        } else if (username.equals("daarood11@gmail.com")) {
-            System.out.println("alrealdy ex");
-        } else {
-
-            System.out.println("Användare email saknas");
-        }*/
 
     }
 
@@ -138,4 +149,6 @@ public class MyStepdefs {
 
         assertEquals(expected, actual);
     }
+
+
 }
